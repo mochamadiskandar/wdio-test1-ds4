@@ -1,10 +1,25 @@
 {
-  "name": "wdio-test1-ds4",
-  "type": "module",
-  "devDependencies": {
-    "@wdio/cli": "^8.39.0",
-    "@wdio/local-runner": "^8.39.0",
-    "@wdio/mocha-framework": "^8.39.0",
-    "@wdio/spec-reporter": "^8.39.0"
-  }
+    "name": "wdio-test1-ds4",
+    "version": "",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "wdio": "wdio run ./wdio.conf.js"
+    },
+    "author": {
+        "name": "Mochamad Iskandar"
+    },
+    "license": "ISC",
+    "bugs": {},
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "devDependencies": {
+        "@wdio/cli": "^8.39.0",
+        "@wdio/local-runner": "^8.39.0",
+        "@wdio/mocha-framework": "^8.39.0",
+        "@wdio/spec-reporter": "^8.39.0"
+    }
 }
