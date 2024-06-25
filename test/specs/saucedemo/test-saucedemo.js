@@ -42,6 +42,18 @@ describe('Test - Sauce Demo Login Page', () => {
     })
 
     it('TC2 - Add Item to Cart', async () => {
+        // waiting inventory page opened
+        await browser.waitUntil(async () => {
+            return (
+                (await browser.getUrl()) ==
+                    'https://www.saucedemo.com/inventory.html',
+                {
+                    timeout: 5000,
+                    timeoutMsg: 'expected url to be different after 5s',
+                }
+            )
+        })
+
         //get element
         const buttonAddToCart = await $(
             "//button[contains(text(), 'Add to cart')]",
@@ -61,7 +73,6 @@ describe('Test - Sauce Demo Login Page', () => {
         await expect(badgeText).not.toBe(null)
         console.log('🚀 ~ it ~ badgeText :', badgeText)
 
-        // await browser.debug()
-        await browser.pause(10000)
+        await browser.debug()
     })
 })
