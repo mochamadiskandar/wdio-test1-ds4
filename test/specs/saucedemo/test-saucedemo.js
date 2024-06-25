@@ -21,6 +21,7 @@ describe('Test - Sauce Demo Login Page', () => {
         )
         console.log('🚀 ~ it ~ passwordPlaceholder:', passwordPlaceholder)
 
+        // use getValue to get value from elemen form like input, textarea, button, dll
         const loginButtonValue = await loginGreenButton.getValue()
         console.log('🚀 ~ it ~ loginButtonValue:', loginButtonValue)
 
@@ -34,7 +35,28 @@ describe('Test - Sauce Demo Login Page', () => {
         await expect(titleProducts).toBeDisplayed()
     })
 
-    // it('TC2 - Add Item to Cart', async () => {
-    //     await browser.url(baseUrl)
-    // })
+    it('TC2 - Add Item to Cart', async () => {
+        // await browser.url(baseUrl)
+
+        //get element
+        const buttonAddToCart = await $(
+            "//button[contains(text(), 'Add to cart')]",
+        )
+
+        const shoppingCartBadge = await $(
+            "//span[@class= 'shopping_cart_badge']",
+        )
+
+        // Test Execution
+        buttonAddToCart.click()
+
+        // assertion
+        // use getText to get visible text from element html (non form)
+        const badgeText = await shoppingCartBadge.getText()
+        await expect(badgeText).not.toBe(0)
+        await expect(badgeText).not.toBe(null)
+        console.log('🚀 ~ it ~ badgeText :', badgeText)
+
+        await browser.debug()
+    })
 })
