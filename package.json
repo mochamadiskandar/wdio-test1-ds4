@@ -14,7 +14,7 @@
     "bugs": {},
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/mochamadiskandar/wdio-test1-ds4"
     },
     "devDependencies": {
         "@wdio/cli": "^8.39.0",
