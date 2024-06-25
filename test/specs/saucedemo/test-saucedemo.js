@@ -1,16 +1,17 @@
+import { browser, $ } from '@wdio/globals'
+
 describe('Test - Sauce Demo Login Page', () => {
-    const baseUrl = 'https://www.saucedemo.com/'
     it('TC1 - Login Success', async () => {
-        await browser.url(baseUrl)
+        await browser.url('https://www.saucedemo.com')
 
         //get element
         const usernameTextBox = await $("//input[@id='user-name']")
         const passwordTextBox = await $("//input[@name='password']")
-        const loginGreenButton = await $(
+        const loginButton = await $(
             "//input[@class= 'submit-button btn_action']",
         )
 
-        // just check
+        // check console log
         const usernamePlaceholder = await usernameTextBox.getAttribute(
             'placeholder',
         )
@@ -22,22 +23,25 @@ describe('Test - Sauce Demo Login Page', () => {
         console.log('🚀 ~ it ~ passwordPlaceholder:', passwordPlaceholder)
 
         // use getValue to get value from elemen form like input, textarea, button, dll
-        const loginButtonValue = await loginGreenButton.getValue()
+        const loginButtonValue = await loginButton.getValue()
         console.log('🚀 ~ it ~ loginButtonValue:', loginButtonValue)
 
         // Test Execution
+        await usernameTextBox.waitForDisplayed({ timeout: 2000 })
         await usernameTextBox.setValue('standard_user')
+        await passwordTextBox.waitForDisplayed({ timeout: 2000 })
         await passwordTextBox.setValue('secret_sauce')
-        await loginGreenButton.click()
+        await loginButton.click()
 
         // assertion
+        await expect(browser).toHaveUrl(
+            'https://www.saucedemo.com/inventory.html',
+        )
         const titleProducts = await $("//span[@class= 'title']")
         await expect(titleProducts).toBeDisplayed()
     })
 
     it('TC2 - Add Item to Cart', async () => {
-        // await browser.url(baseUrl)
-
         //get element
         const buttonAddToCart = await $(
             "//button[contains(text(), 'Add to cart')]",
@@ -48,7 +52,7 @@ describe('Test - Sauce Demo Login Page', () => {
         )
 
         // Test Execution
-        buttonAddToCart.click()
+        await buttonAddToCart.click()
 
         // assertion
         // use getText to get visible text from element html (non form)
@@ -57,6 +61,7 @@ describe('Test - Sauce Demo Login Page', () => {
         await expect(badgeText).not.toBe(null)
         console.log('🚀 ~ it ~ badgeText :', badgeText)
 
-        await browser.debug()
+        // await browser.debug()
+        await browser.pause(10000)
     })
 })
