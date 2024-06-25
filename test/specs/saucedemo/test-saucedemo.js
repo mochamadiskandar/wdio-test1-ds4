@@ -1,7 +1,8 @@
-import { browser, $ } from '@wdio/globals'
+import { browser, $, $$ } from '@wdio/globals'
 
 describe('Test - Sauce Demo Login Page', () => {
     it('TC1 - Login Success', async () => {
+        // Buka browser dan navigasi ke URL
         await browser.url('https://www.saucedemo.com')
 
         //get element
@@ -11,26 +12,13 @@ describe('Test - Sauce Demo Login Page', () => {
             "//input[@class= 'submit-button btn_action']",
         )
 
-        // check console log
-        const usernamePlaceholder = await usernameTextBox.getAttribute(
-            'placeholder',
-        )
-        console.log('🚀 ~ it ~ usernamePlaceholder:', usernamePlaceholder)
-
-        const passwordPlaceholder = await passwordTextBox.getAttribute(
-            'placeholder',
-        )
-        console.log('🚀 ~ it ~ passwordPlaceholder:', passwordPlaceholder)
-
-        // use getValue to get value from elemen form like input, textarea, button, dll
-        const loginButtonValue = await loginButton.getValue()
-        console.log('🚀 ~ it ~ loginButtonValue:', loginButtonValue)
-
         // Test Execution
         await usernameTextBox.waitForDisplayed({ timeout: 2000 })
         await usernameTextBox.setValue('standard_user')
         await passwordTextBox.waitForDisplayed({ timeout: 2000 })
         await passwordTextBox.setValue('secret_sauce')
+
+        console.log('🚀 ~ it ~ loginButtonValue:', await loginButton.getValue())
         await loginButton.click()
 
         // assertion
@@ -41,8 +29,8 @@ describe('Test - Sauce Demo Login Page', () => {
         await expect(titleProducts).toBeDisplayed()
     })
 
-    it('TC2 - Add Item to Cart', async () => {
-        // waiting inventory page opened
+    it('TC2 - Add Multiple Item to Cart', async () => {
+        // Tunggu inventory page terbuka
         await browser.waitUntil(async () => {
             return (
                 (await browser.getUrl()) ==
@@ -54,24 +42,24 @@ describe('Test - Sauce Demo Login Page', () => {
             )
         })
 
-        //get element
-        const buttonAddToCart = await $(
+        //  Get All Product pada halaman
+        const getAllProducts = await $$(
             "//button[contains(text(), 'Add to cart')]",
         )
 
-        const shoppingCartBadge = await $(
-            "//span[@class= 'shopping_cart_badge']",
-        )
+        // Looping dan add to cart
+        for (let i = 0; i < getAllProducts.length; i++) {
+            await getAllProducts[i].click()
+        }
 
-        // Test Execution
-        await buttonAddToCart.click()
+        // Verifikasi bahwa semua item telah ditambahkan ke keranjang
+        const cartBadge = await $("//span[@class= 'shopping_cart_badge']")
+        const itemCount = await cartBadge.getText()
 
         // assertion
-        // use getText to get visible text from element html (non form)
-        const badgeText = await shoppingCartBadge.getText()
-        await expect(badgeText).not.toBe(0)
-        await expect(badgeText).not.toBe(null)
-        console.log('🚀 ~ it ~ badgeText :', badgeText)
+        console.log('🚀 ~ it ~ badgeText :', itemCount)
+        await expect(itemCount).not.toBe(0)
+        await expect(itemCount).not.toBe(null)
 
         await browser.debug()
     })
